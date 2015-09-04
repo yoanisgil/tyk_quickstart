@@ -1,0 +1,33 @@
+tyk_nginx:
+    image: tykio/tyk-host-manager:latest
+    links:
+        - tyk_redis:tyk_redis
+        - tyk_mongo:tyk_mongo
+        - tyk_gateway:tyk_gateway
+        - tyk_dashboard:tyk_dashboard
+    environment:
+        - DOMAINALIAS:tyk.docker
+    ports:
+        - "8888:80"
+tyk_gateway:
+    image: tykio/tyk-gateway:latest
+    links:
+        - tyk_redis:redis
+        - tyk_mongo:mongo
+    ports:
+        - "8080:8080"
+tyk_dashboard:
+    image: tykio/tyk-dashboard:latest
+    links:
+        - tyk_redis:redis
+        - tyk_mongo:mongo
+        - tyk_gateway:tyk_gateway
+    ports:
+        - "3000:3000"
+tyk_redis:
+    image: redis:latest
+    hostname: redis
+tyk_mongo:
+    image: mongo:latest
+    command: ["mongod", "--smallfiles"]
+    hostname: mongo
