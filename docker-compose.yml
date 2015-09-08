@@ -6,7 +6,7 @@ tyk_nginx:
         - tyk_gateway:tyk_gateway
         - tyk_dashboard:tyk_dashboard
     environment:
-        - DOMAINALIAS:tyk.docker
+        - DOMAINALIAS=tyk.docker
     ports:
         - "8888:80"
 tyk_gateway:
