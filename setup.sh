@@ -10,13 +10,29 @@
 
 # OSX users will need to specify a virtual IP, linux users can use 127.0.0.1
 
-if [ -z "$1" ]
+DOCKER_IP=127.0.0.1
+
+if [ -n "$DOCKER_HOST" ]
 then
-        echo "Please specify the docker IP Address (e.g. ./quickstart 127.0.0.1)"
-        exit
+		echo "Detected a Docker VM..."
+		REMTCP=${DOCKER_HOST#tcp://}
+		DOCKER_IP=${REMTCP%:*}
 fi
 
-LOCALIP=$1 
+if [ -n "$1" ]
+then
+		DOCKER_IP=$1
+		echo "Docker host address explicitly set."
+		echo "Using $DOCKER_IP as Tyk host address."
+fi
+
+if [ -z "$1" ]
+then
+        echo "Using $DOCKER_IP as Tyk host address."
+        echo "If this is wrong, please specify the instance IP address (e.g. ./setup.sh 192.168.1.1)"
+fi
+
+LOCALIP=$DOCKER_IP
 RANDOM_USER=$(env LC_CTYPE=C tr -dc "a-z0-9" < /dev/urandom | head -c 10)
 PASS="test123"
 

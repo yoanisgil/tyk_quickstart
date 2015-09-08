@@ -8,6 +8,13 @@ Launch the stack:
 
 Setup your organization/user:
 
-    ./setup.sh 127.0.0.1
+    ./setup.sh
+
+To run on a different IP address:
+	
+	./setup.sh instance-ip-address
+
+
+
     
-If you are on OSX you need to need to run ```boot2docker ip``` or ```docker-machine ip machine-name```
+
