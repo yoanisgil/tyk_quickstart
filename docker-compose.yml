@@ -5,7 +5,7 @@ dnsdock:
     ports:
         - 172.17.42.1:53:53/udp
 tyk_gateway:
-    image: dd0877d2cb39
+    image: tykio/tyk-gateway:latest
     links:
         - tyk_redis:redis
         - tyk_mongo:mongo
@@ -18,7 +18,7 @@ tyk_gateway:
     environment:
         - DNSDOCK_NAME=tyk_gateway
 tyk_dashboard:
-    image: a7f63fe18895
+    image: tykio/tyk-dashboard:latest
     links:
         - tyk_redis:redis
         - tyk_mongo:mongo
