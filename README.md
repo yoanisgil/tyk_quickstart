@@ -4,17 +4,26 @@ Make sure you have installed [docker](https://docs.docker.com/installation/) and
 
 Launch the stack:
     
-    docker-compose up -d tyk_nginx
+    docker-compose up -d
 
-Setup your organization/user:
+Setup your organization/user and portal:
 
-    ./setup.sh
+    ./setup.sh tyk_dashboard.tyk_dashboard.docker your.portal.domain
 
-To run on a different IP address:
-	
-	./setup.sh instance-ip-address
+Then log in using the instructions.
 
+### Note to enable the portal:
 
+The setup script will automatically create locally routed proxies for the dashboard (so that your docker container can serve both APIs and your portal from Port 80). In a traditional setup without docker, internal networking allows us to use `localhost` to refer to the upstream dashboard as in the proxy, however in docker, we need to route around a local DNS.
 
-    
+This mean the fixtures we use to set up the portal routes for an organisation to be proxiued by the gateway ned to be modified for docker, this is pretty easy:
 
+### To enable the portal:
+
+- Go to the APIs section
+- In each API that is greyed out, edit it and replace `localhost` in the Target URL with `tyk_dashboard.tyk_dashboard.docker`
+- Save each API
+
+This will reload the proxies and enable the custom portal domain you have specified to proxy via Tyk Gateway to the appropriate configuration in the dashboard, obviously make sure that your portal domain is pointing at your docker instance.
+
+If you wish to change your portal domain - **DO NOT USE** the drop-down option in the navigation, instead, change the domain names in the three site entries in the API section. However, if you want clean URLs constructed for your APIs in the dashboard, setting this value will show the URLs for your APIs as relative to the domain you've set.

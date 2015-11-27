@@ -1,29 +1,35 @@
-tyk_nginx:
-    image: tykio/tyk-host-manager:latest
-    links:
-        - tyk_redis:tyk_redis
-        - tyk_mongo:tyk_mongo
-        - tyk_gateway:tyk_gateway
-        - tyk_dashboard:tyk_dashboard
-    environment:
-        - DOMAINALIAS=tyk.docker
+dnsdock:
+    image: tonistiigi/dnsdock
+    volumes:
+        - /var/run/docker.sock:/run/docker.sock
     ports:
-        - "8888:80"
+        - 172.17.42.1:53:53/udp
 tyk_gateway:
-    image: tykio/tyk-gateway:latest
+    image: dd0877d2cb39
     links:
         - tyk_redis:redis
         - tyk_mongo:mongo
     ports:
+        - "80:8080"
         - "8080:8080"
+    volumes:
+        - ./tyk.conf:/opt/tyk-gateway/tyk.conf
+    dns: 172.17.42.1
+    environment:
+        - DNSDOCK_NAME=tyk_gateway
 tyk_dashboard:
-    image: tykio/tyk-dashboard:latest
+    image: a7f63fe18895
     links:
         - tyk_redis:redis
         - tyk_mongo:mongo
         - tyk_gateway:tyk_gateway
     ports:
         - "3000:3000"
+    volumes:
+        - ./tyk_analytics.conf:/opt/tyk-dashboard/tyk_analytics.conf
+    dns: 172.17.42.1
+    environment:
+        - DNSDOCK_NAME=tyk_dashboard
 tyk_redis:
     image: redis:latest
     hostname: redis

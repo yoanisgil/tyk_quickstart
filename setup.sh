@@ -11,6 +11,7 @@
 # OSX users will need to specify a virtual IP, linux users can use 127.0.0.1
 
 DOCKER_IP=127.0.0.1
+DOMAIN=www.tyk.docker
 
 if [ -n "$DOCKER_HOST" ]
 then
@@ -26,6 +27,13 @@ then
 		echo "Using $DOCKER_IP as Tyk host address."
 fi
 
+if [ -n "$2" ]
+then
+		DOMAIN=$2
+		echo "Docker portal domain address explicitly set."
+		echo "Using $DOMAIN as Tyk host address."
+fi
+
 if [ -z "$1" ]
 then
         echo "Using $DOCKER_IP as Tyk host address."
@@ -37,7 +45,7 @@ RANDOM_USER=$(env LC_CTYPE=C tr -dc "a-z0-9" < /dev/urandom | head -c 10)
 PASS="test123"
 
 echo "Creating Organisation"
-ORGDATA=$(curl --silent --header "admin-auth: 12345" --header "Content-Type:application/json" --data '{"owner_name": "TestOrg5 Ltd.","owner_slug": "testorg"}' http://$LOCALIP:3000/admin/organisations 2>&1)
+ORGDATA=$(curl --silent --header "admin-auth: 12345" --header "Content-Type:application/json" --data '{"owner_name": "TestOrg5 Ltd.","owner_slug": "testorg", "cname_enabled":true}' http://$LOCALIP:3000/admin/organisations 2>&1)
 #echo $ORGDATA
 ORGID=$(echo $ORGDATA | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["Meta"]')
 echo "ORGID: $ORGID" 
@@ -56,6 +64,10 @@ echo "NEW ID: $USER_ID"
 
 echo "Setting password"
 OK=$(curl --silent --header "authorization: $USER_CODE" --header "Content-Type:application/json" http://$LOCALIP:3000/api/users/$USER_ID/actions/reset --data '{"new_password":"'$PASS'"}')
+
+
+echo "Setting up the portal domain"
+curl -d "domain="$DOMAIN"" -H "admin-auth:12345" http://tyk_dashboard.tyk_dashboard.docker:3000/admin/organisations/$ORGID/generate-portals
 
 echo ""
 
