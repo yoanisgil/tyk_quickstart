@@ -16,7 +16,7 @@ Then log in using the instructions.
 
 The setup script will automatically create locally routed proxies for the dashboard (so that your docker container can serve both APIs and your portal from Port 80). In a traditional setup without docker, internal networking allows us to use `localhost` to refer to the upstream dashboard as in the proxy, however in docker, we need to route around a local DNS.
 
-This mean the fixtures we use to set up the portal routes for an organisation to be proxiued by the gateway ned to be modified for docker, this is pretty easy:
+This means the fixtures we use to set up the portal routes for an organisation to be proxied by the gateway ned to be modified for docker, this is pretty easy:
 
 ### To enable the portal:
 
