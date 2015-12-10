@@ -3,18 +3,19 @@ dnsdock:
     volumes:
         - /var/run/docker.sock:/run/docker.sock
     ports:
-        - 172.17.0.1:53:53/udp
+        - 172.17.42.1:53:53/udp
 tyk_gateway:
     image: tykio/tyk-gateway:latest
     links:
         - tyk_redis:redis
         - tyk_mongo:mongo
+        - dnsdock:dnsdock
     ports:
         - "80:8080"
         - "8080:8080"
     volumes:
         - ./tyk.conf:/opt/tyk-gateway/tyk.conf
-    dns: 172.17.0.1
+    dns: dnsdock
     environment:
         - DNSDOCK_NAME=tyk_gateway
 tyk_dashboard:
@@ -23,11 +24,12 @@ tyk_dashboard:
         - tyk_redis:redis
         - tyk_mongo:mongo
         - tyk_gateway:tyk_gateway
+        - dnsdock:dnsdock
     ports:
         - "3000:3000"
     volumes:
         - ./tyk_analytics.conf:/opt/tyk-dashboard/tyk_analytics.conf
-    dns: 172.17.0.1`
+    dns: dnsdock
     environment:
         - DNSDOCK_NAME=tyk_dashboard
 tyk_redis:
