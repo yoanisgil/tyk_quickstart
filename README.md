@@ -8,7 +8,11 @@ Launch the stack:
 
 Setup your organization/user and portal:
 
-    ./setup.sh tyk_dashboard.tyk_dashboard.docker your.portal.domain
+    ./setup.sh 127.0.0.1 your.portal.domain
+
+Or for OSX Users:
+	echo $DOCKER_HOST
+	./setup.sh YOUR_DOCKER_IP your.portal.domain
 
 Then log in using the instructions.
 
@@ -21,7 +25,7 @@ This means the fixtures we use to set up the portal routes for an organisation t
 ### To enable the portal:
 
 - Go to the APIs section
-- In each API that is greyed out, edit it and replace `localhost` in the Target URL with `tyk_dashboard.tyk_dashboard.docker`
+- In each API that is greyed out, edit it and replace `localhost` in the Target URL with `ambassador_1`
 - Save each API
 
 This will reload the proxies and enable the custom portal domain you have specified to proxy via Tyk Gateway to the appropriate configuration in the dashboard, obviously make sure that your portal domain is pointing at your docker instance.
