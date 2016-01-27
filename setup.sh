@@ -6,7 +6,7 @@
 # USAGE
 # -----
 #
-# $> ./start.sh {IP ADDRESS OF DOCKER VM}
+# $> ./setup.sh {IP ADDRESS OF DOCKER VM}
 
 # OSX users will need to specify a virtual IP, linux users can use 127.0.0.1
 
