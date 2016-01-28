@@ -11,7 +11,7 @@
 # OSX users will need to specify a virtual IP, linux users can use 127.0.0.1
 
 # Tyk dashboard settings
-TYK_DASHBOARD_USERNAME="test@test.com"
+TYK_DASHBOARD_USERNAME="test$RANDOM@test.com"
 TYK_DASHBOARD_PASSWORD="test123"
 
 # Tyk portal settings
