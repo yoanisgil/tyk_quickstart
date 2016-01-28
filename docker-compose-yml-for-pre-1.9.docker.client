@@ -1,30 +1,35 @@
-ambassador:
-    image: cpuguy83/docker-grand-ambassador
+dnsdock:
+    image: tonistiigi/dnsdock
     volumes:
         - /var/run/docker.sock:/run/docker.sock
-    command: "-name tykquickstart_tyk_gateway_1 -name tykquickstart_tyk_dashboard_1"
+    ports:
+        - 172.17.42.1:53:53/udp
 tyk_gateway:
     image: tykio/tyk-gateway:latest
     links:
         - tyk_redis:redis
         - tyk_mongo:mongo
-        - ambassador:tyk_dashboard
     ports:
         - "80:8080"
         - "8080:8080"
     volumes:
         - ./tyk.conf:/opt/tyk-gateway/tyk.conf
+    dns: 172.17.42.1
+    environment:
+        - DNSDOCK_NAME=tyk_gateway
 tyk_dashboard:
     image: tykio/tyk-dashboard:latest
     links:
         - tyk_redis:redis
         - tyk_mongo:mongo
         - tyk_gateway:tyk_gateway
-        - ambassador:tyk_gateway
     ports:
         - "3000:3000"
     volumes:
         - ./tyk_analytics.conf:/opt/tyk-dashboard/tyk_analytics.conf
+    dns: 172.17.42.1
+    environment:
+        - DNSDOCK_NAME=tyk_dashboard
 tyk_redis:
     image: redis:latest
     hostname: redis
