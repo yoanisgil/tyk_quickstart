@@ -19,7 +19,7 @@ TYK_DASHBOARD_PASSWORD="test123"
 
 # Tyk portal settings
 TYK_PORTAL_DOMAIN="www.tyk-portal-test.com"
-TYK_PORTAL_PATH="/"
+TYK_PORTAL_PATH="/portal/"
 
 DOCKER_IP="127.0.0.1"
 
@@ -101,5 +101,5 @@ echo "===="
 echo "Login at http://$DOCKER_IP:3000/"
 echo "Username: $TYK_DASHBOARD_USERNAME"
 echo "Password: $TYK_DASHBOARD_PASSWORD"
-echo "Portal: http://$TYK_PORTAL_DOMAIN"
+echo "Portal: http://$TYK_PORTAL_DOMAIN$TYK_PORTAL_PATH"
 echo ""

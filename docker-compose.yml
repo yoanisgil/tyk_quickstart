@@ -19,7 +19,7 @@ services:
         networks:
             - gateway
     tyk_pump:
-        image: tykio/tyk-pump-pub:latest
+        image: tykio/tyk-pump-docker-pub:latest
         networks:
             - gateway
     tyk_redis:
