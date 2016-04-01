@@ -2,6 +2,16 @@
 
 Make sure you have installed [docker](https://docs.docker.com/installation/) and [compose](https://docs.docker.com/compose/install/).
 
+Go get a free Pro Starter License from [Tyk.io](https://tyk.io/tyk-professional-licenses/) and add it to the `license_key` field in the `tyk_analytics.conf` file and save it:
+
+	{
+	    ...
+	    "mongo_url": "mongodb://mongo:27017/tyk_analytics",
+	    "license_key": "LICENSEKEY",
+	    "page_size": 10,
+	    ...
+	}
+
 Launch the stack:
     
     docker-compose up -d
