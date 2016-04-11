@@ -24,6 +24,7 @@ services:
         image: tykio/tyk-dashboard:latest
         ports:
             - "3000:3000"
+            - "5000:5000"
         volumes:
             - ./tyk_analytics.conf:/opt/tyk-dashboard/tyk_analytics.conf
         networks:
