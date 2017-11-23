@@ -1,6 +1,7 @@
 #! /bin/bash
 
 # This script will set up a full tyk environment on your machine
+# The script requires docker, docker-compose and python to be already installed.
 # and also create a demo user for you with one command
 
 # USAGE
@@ -9,6 +10,20 @@
 # $> ./setup.sh {IP ADDRESS OF DOCKER VM}
 
 # OSX users will need to specify a virtual IP, linux users can use 127.0.0.1
+
+# Test for python's existence
+command -v python &>/dev/null
+if [[ $? -ne 0 ]]  
+then
+        echo "Please install Python or set its PATH. Will exit '$0' now."
+fi
+
+# Verify json module exits (On Window OS it might not be installed by default)
+python -c "import json" &> /dev/null
+if [[ $? -ne 0 ]]
+then
+    echo Plese install python json module and re-run the script. Will exit $0 now.
+fi
 
 # Proxy
 TYK_DASHBOARD_DOMAIN="tyk_dashboard"
