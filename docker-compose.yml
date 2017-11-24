@@ -21,7 +21,7 @@ services:
                 aliases:
                     - mongo
     tyk_dashboard:
-        image: tykio/tyk-dashboard:latest
+        image: tykio/tyk-dashboard:1.4.0
         ports:
             - "3000:3000"
             - "5000:5000"
@@ -36,7 +36,7 @@ services:
         volumes:
             - ./pump.conf:/opt/tyk-pump/pump.conf
     tyk_gateway:
-        image: tykio/tyk-gateway:latest
+        image: tykio/tyk-gateway:2.4.0
         ports:
             - "80:8080"
             - "8080:8080"
