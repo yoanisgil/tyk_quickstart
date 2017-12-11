@@ -1,34 +1,49 @@
-ambassador:
-    image: cpuguy83/docker-grand-ambassador
-    volumes:
-        - /var/run/docker.sock:/run/docker.sock
-    command: "-name tykquickstart_tyk_gateway_1 -name tykquickstart_tyk_dashboard_1"
-tyk_gateway:
-    image: tykio/tyk-gateway:latest
-    links:
-        - tyk_redis:redis
-        - tyk_mongo:mongo
-        - ambassador:tyk_dashboard
-    ports:
-        - "80:8080"
-        - "8080:8080"
-    volumes:
-        - ./tyk.conf:/opt/tyk-gateway/tyk.conf
-tyk_dashboard:
-    image: tykio/tyk-dashboard:latest
-    links:
-        - tyk_redis:redis
-        - tyk_mongo:mongo
-        - tyk_gateway:tyk_gateway
-        - ambassador:tyk_gateway
-    ports:
-        - "3000:3000"
-    volumes:
-        - ./tyk_analytics.conf:/opt/tyk-dashboard/tyk_analytics.conf
-tyk_redis:
-    image: redis:latest
-    hostname: redis
-tyk_mongo:
-    image: mongo:latest
-    command: ["mongod", "--smallfiles"]
-    hostname: mongo
+version: '2'
+
+services:
+    tyk_redis:
+        image: redis:3.2
+        hostname: redis
+        ports:
+            - "6379:6379"
+        networks:
+            gateway:
+                aliases:
+                    - redis
+    tyk_mongo:
+        image: mongo:3.0
+        command: ["mongod", "--smallfiles"]
+        hostname: mongo
+        ports:
+            - "27017:27017"
+        networks:
+            gateway:
+                aliases:
+                    - mongo
+    tyk_dashboard:
+        image: tykio/tyk-dashboard:v1.4.0
+        ports:
+            - "3000:3000"
+            - "5000:5000"
+        volumes:
+            - ./tyk_analytics.conf:/opt/tyk-dashboard/tyk_analytics.conf
+        networks:
+            - gateway
+    tyk_pump:
+        image: tykio/tyk-pump-docker-pub:latest
+        networks:
+            - gateway
+        volumes:
+            - ./pump.conf:/opt/tyk-pump/pump.conf
+    tyk_gateway:
+        image: tykio/tyk-gateway:v2.4.0
+        ports:
+            - "80:8080"
+            - "8080:8080"
+        volumes:
+            - ./tyk.conf:/opt/tyk-gateway/tyk.conf
+        networks:
+            - gateway
+
+networks:
+    gateway:
