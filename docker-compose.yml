@@ -2,7 +2,7 @@ version: '2'
 
 services:
     tyk_redis:
-        image: redis:latest
+        image: redis:3.2
         hostname: redis
         ports:
             - "6379:6379"
@@ -11,7 +11,7 @@ services:
                 aliases:
                     - redis
     tyk_mongo:
-        image: mongo:latest
+        image: mongo:3.0
         command: ["mongod", "--smallfiles"]
         hostname: mongo
         ports:
